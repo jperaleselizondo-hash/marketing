@@ -25,3 +25,8 @@
 - Module 1 normalized logical schema is proposed in [07-RESEARCH-ENGINE-SCHEMA-V1.md](07-RESEARCH-ENGINE-SCHEMA-V1.md), based on historical spreadsheet and Notion research method.
 - Three modules confirmed: Deep Research Engine → Campaign Strategy → Creative Production. Module 2 produces approved Campaign Blueprint and Master Persuasive Narrative; Module 3 produces reviewed advertising assets.
 - Schema remains **unapproved** pending Xano feasibility and owner acceptance; no physical tables authorized.
+
+## Historical Ad Creation System integrated (2026-10-27)
+- See [08-AD-CREATION-SYSTEM-INTEGRATION.md](08-AD-CREATION-SYSTEM-INTEGRATION.md) for screenshot-derived process mapping.
+- Confirmed module ownership: M1 research/awareness/sophistication; M2 dominant desire → product performance → one belief/core concept → idea approval; M3 lead/hook/body/objections/offer/risk reduction/CUBA.
+- Evaldo p.101 ten questions remain unverified; original source needed. No implementation authorization.
