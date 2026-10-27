@@ -24,3 +24,6 @@ Review and challenge the logical data model, enumerate missing relational constr
 
 ## Review checklist
 Data model integrity; tenant isolation; source provenance; IVOC taxonomy; score uncertainty; async reliability; privacy/licensing; Big Idea approval; claim substantiation; AI output validation; report snapshot immutability; UX for reviewer corrections; cost and runtime budgets.
+
+## New schema review task (2026-10-27)
+Read docs/06-SPREADSHEET-RESEARCH-MAPPING.md and docs/07-RESEARCH-ENGINE-SCHEMA-V1.md. Treat 07 as the current **proposed** Module 1 logical schema and 02 as the prior baseline. First deliver a **read-only** Xano feasibility/gap analysis: FK and uniqueness enforcement, transactional review gates, async jobs, auth scoping, physical migration order, and minimal viable tables. Do not create tables or deploy. The agreed system now has three modules: Research → Campaign Strategy → Creative Production.
