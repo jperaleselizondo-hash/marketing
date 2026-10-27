@@ -20,3 +20,8 @@
 7. Physical schema constraints, enums and transactions validated in Xano before creation.
 
 **Status:** architecture baseline for review; not implementation authorization.
+
+## 2026-10-27 schema review candidate
+- Module 1 normalized logical schema is proposed in [07-RESEARCH-ENGINE-SCHEMA-V1.md](07-RESEARCH-ENGINE-SCHEMA-V1.md), based on historical spreadsheet and Notion research method.
+- Three modules confirmed: Deep Research Engine → Campaign Strategy → Creative Production. Module 2 produces approved Campaign Blueprint and Master Persuasive Narrative; Module 3 produces reviewed advertising assets.
+- Schema remains **unapproved** pending Xano feasibility and owner acceptance; no physical tables authorized.
