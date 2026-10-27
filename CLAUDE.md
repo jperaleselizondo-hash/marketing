@@ -27,3 +27,6 @@ Data model integrity; tenant isolation; source provenance; IVOC taxonomy; score 
 
 ## New schema review task (2026-10-27)
 Read docs/06-SPREADSHEET-RESEARCH-MAPPING.md and docs/07-RESEARCH-ENGINE-SCHEMA-V1.md. Treat 07 as the current **proposed** Module 1 logical schema and 02 as the prior baseline. First deliver a **read-only** Xano feasibility/gap analysis: FK and uniqueness enforcement, transactional review gates, async jobs, auth scoping, physical migration order, and minimal viable tables. Do not create tables or deploy. The agreed system now has three modules: Research → Campaign Strategy → Creative Production.
+
+## Historical ad-creation process (2026-10-27)
+Also read docs/08-AD-CREATION-SYSTEM-INTEGRATION.md. It maps the owner's flowchart to the three-module design. Do not confuse the research engine with selection of the final campaign idea; that belongs to Campaign Strategy. The Evaldo ten-question rubric is an unresolved source dependency. No database writes authorized.
