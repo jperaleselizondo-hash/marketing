@@ -102,6 +102,8 @@ Details in [11-PHASE-1-IMPLEMENTATION.md](11-PHASE-1-IMPLEMENTATION.md).
 Details in [13-WEWEB-PHASE-2A-IMPLEMENTATION.md](13-WEWEB-PHASE-2A-IMPLEMENTATION.md).
 - ADR-022: **WeWeb ↔ Xano wiring.**
   - The WeWeb project "Marketing Engine" (`6b4943ea-…`) uses the native Xano integration (founder decision) as its auth provider. There is no WeWeb backend, and calls go from the browser directly to Xano workspace 3 `v1`.
-  - Exception to docs/12 §1: the integration connection stores a Metadata API key, which the founder restricted to workspace 3. It was verified that the connection sees only the 8 workspace-3 API groups. The key must stay workspace-scoped and be rotated if the project is shared.
+  - Exception to docs/12 §1: the integration connection stores a Xano Metadata API token in a WeWeb environment variable that the founder confirmed is **Secure** (server-side only, not shipped to browsers). The connection sees only the 8 workspace-3 API groups.
+  - The token's permissions are reported **broad**; the exact scopes are **unverified**. Least-privilege replacement is pending founder approval (docs/13 §6.6).
+  - Target: read-only access to workspace 3's API groups and endpoints, no database, content or write scopes, with an expiry.
   - The token lives only in the Xano auth plugin's persisted session. Logout is client-side.
   - Private pages are protected by a client-side guard that re-fetches `auth/me` on every load and re-validates the stored organization against active memberships. Server-side authorization remains the source of truth.

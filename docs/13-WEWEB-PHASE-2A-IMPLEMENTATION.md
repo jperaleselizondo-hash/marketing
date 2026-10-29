@@ -1,5 +1,5 @@
 # Phase 2A implementation: WeWeb frontend foundation (Research Engine)
-Date: 2026-10-29. Status: **BUILT in the WeWeb editor, NOT published. Browser validation by the founder is still pending (§7).**
+Date: 2026-10-29. Status: **BUILT in the WeWeb editor, NOT published. Browser QA (§7, A1–A10) and the catch-branch error handling (§6.1) are UNVERIFIED. The Xano metadata token's permissions are reported broad and need remediation (§6.6).**
 
 - **WeWeb project:** Marketing Engine, `6b4943ea-eedb-4dc7-82bb-c3bbc9b690e2`. It is the only WeWeb project touched. Goodz V2 and KMUI were listed by `getMe` but never opened.
 - **Backend:** Xano workspace 3, branch `v1`, through the existing API contracts. No Xano schema, endpoint or data change was made.
@@ -20,7 +20,9 @@ Date: 2026-10-29. Status: **BUILT in the WeWeb editor, NOT published. Browser va
 
 ## 2. Architecture decisions (see ADR-022)
 - **Xano is the backend and the auth provider** (`setProjectAuthProvider: xano`). There is no WeWeb backend, so every call goes from the browser straight to Xano, as docs/12 §2 requires for the per-IP rate limits.
-- **Native Xano integration** (founder's choice). The connection holds a **Metadata API key restricted to workspace 3**. This is a conscious exception to docs/12's "no Xano metadata tokens in WeWeb", made because the integration form required one.
+- **Native Xano integration** (founder's choice). The connection holds a **Xano Metadata API token**. This is a conscious exception to docs/12's "no Xano metadata tokens in WeWeb", made because the integration form required one.
+  - **Storage:** a WeWeb environment variable managed by the connection. The founder confirmed it is flagged **Secure**: encrypted, available only server-side, never shipped to browsers.
+  - **Permissions:** reported **broad** by the founder. The exact scopes are **unverified** (§6.6).
 - **Token storage:** the Xano auth plugin (`auth-set-session`, persisted) holds the token. It is never put in a variable, a URL or a log. "Sign out" is client-side, because Xano has no server-side logout.
 - **Route protection:** a guard workflow (`requireSession`) runs on every private page. It always re-fetches `GET auth/me`, so role or membership changes apply on the next navigation. A 401 clears the session and sends the user to Login. The guard is client-side; the server enforces access on every request regardless.
 - **Organization context:**
@@ -83,10 +85,11 @@ All calls use the `xano/request` action on connection `66ed4281…`. The token i
 |---|---|
 | MCP access and project identity (§1) | Pass |
 | The Xano connection exposes only workspace-3 API groups (8, branch `v1`) | Pass |
-| Endpoint contract sweep: every path/method used by the workflows called without a token from the editor origin | 7 × 401 as expected. `POST organizations/1/projects` returns **400 `Missing param`** before the auth check (Xano validates inputs first; nothing is written, and parameter names are public in the swagger) |
+| Endpoint contract sweep: every path/method used by the workflows called without a token from the editor origin | 7 × 401 as expected. `POST organizations/1/projects` with an empty body returns **400 `Missing param`** before the auth check (see the next row) |
+| Unauthenticated input validation (`POST organizations/{org}/projects`, `POST projects/{id}/transition`) | Xano checks declared inputs **before** `auth = "user"`. A missing, mistyped or out-of-enum input returns 400 `ERROR_CODE_INPUT_ERROR` naming the parameter (e.g. `Missing param: product_id`, `Value is not a valid integer.`, "not one of the allowable values"). A well-formed body returns 401 for both an existing (1) and a non-existent (999999) organization. No database lookup or write happens before auth, and there is no existence oracle. The disclosed information equals the public API spec (`/apispec:<group>`, HTTP 200 without auth). **Not sensitive; no fix needed.** Optional hardening: hide the public API spec per group in Xano |
 | CORS preflight from the editor origin (GET and POST with `authorization`) | Pass |
 | Unit check, in Node, of the JS bodies of `apiError`, `roleAtLeast`, `currentMembership`, organization validation and transition options, against the documented response shapes | **All assertions pass**. Covers: code prefix parsing, 401/403/404/rate-limit wording, single-membership auto-select, a tampered localStorage id, an inactive membership, multiple memberships → picker, role gates, transitions per status and role |
-| Every workflow accepted by the WeWeb validator and registered | 6 function workflows, 5 page workflows, 1 app workflow and 7 element workflows |
+| Every workflow accepted by the WeWeb validator and registered | **20 workflows:** 6 function, 5 page, 1 app (`xano/auth-refresh`) and 8 element (Sign in, Sign out ×2, Choose organization, Status filter change, Create project, Transition click, Archive click) |
 
 **Not tested by Claude:** anything that requires signing in. There are no test credentials, and the only account is the founder's. No synthetic users or data were created; Xano is unchanged.
 
@@ -95,43 +98,59 @@ All calls use the `xano/request` action on connection `66ed4281…`. The token i
    - every API error shows the generic message;
    - a 401 inside a catch would not redirect.
 
-   The guard's `filter` still stops the page. **Verify with the first failed sign-in (§7, check 2)** using the workflow execution logs.
+   The guard's `filter` still stops the page. **Verify with the first failed sign-in (§7, A2)** using the workflow execution logs.
 2. **Client-side route protection.** The shell of a private page can render for a moment before the guard redirects. No data is shown, since all data comes from authenticated calls. WeWeb's own "unauthenticated page" setting is still empty (`unauthenticatedPageId: null`); the founder can set it to Login in the editor if WeWeb offers it for Xano auth.
 3. **Two `auth/me` calls per page load** (On user load plus the guard), traded for fresh roles. Acceptable for now.
 4. **Project creation currently fails by design:**
    - workspace 3 has no product and no published methodology version (founder instruction, docs/12 §5);
    - the form explains which prerequisite is missing.
 5. **Project detail shows product and methodology as `#id`.** There is no lookup by name yet.
-6. **Metadata API key stored in WeWeb** (ADR-022):
-   - confirm in Xano that the key is restricted to workspace 3, with the narrowest scope offered;
-   - rotate it if the WeWeb project is ever shared outside the founder's account.
-7. **Production CORS** is not checked: the app is unpublished. Xano echoed the editor origin, and the published domain must be re-checked before go-live.
-8. **Rate limits use `$env.$remote_ip`** (docs/11 §9.3). It is still unverified whether this sees the real browser IP.
-9. **Not built in Phase 2A** (out of scope):
+6. **Xano Metadata API token stored in WeWeb — REMEDIATION REQUIRED** (ADR-022).
+   - **Browser exposure:** none. The WeWeb variable is Secure (founder-confirmed), and the runtime never needs the token: login and data calls use only the instance domain plus the user's own auth token.
+   - **Who can use it:** anyone with editor access to the WeWeb project (and its MCP), through the editor's server-side integration functions.
+   - **Permissions:** reported **broad** by the founder; exact scopes **unverified**. Neither the Xano CLI nor the WeWeb MCP can list Metadata API token scopes without reading the token, which was not done.
+   - **Why it matters:** if the token is not limited to workspace 3, it may reach Goodz (ws 1) and PMF (ws 2) on the same instance. With database, content or write scopes it could read or alter records, schemas or endpoints.
+   - **What WeWeb needs:** the integration uses it only for editor discovery (listing API groups and endpoints). It therefore needs, at most, read access to workspace 3's API groups/endpoints.
+   - **Plan:** least-privilege replacement, pending founder approval.
+7. **Unauthenticated input validation precedes auth** (§5). Platform behavior; discloses only the public input schema. No fix needed.
+8. **Production CORS** is not checked: the app is unpublished. Xano echoed the editor origin, and the published domain must be re-checked before go-live.
+9. **Rate limits use `$env.$remote_ip`** (docs/11 §9.3). It is still unverified whether this sees the real browser IP.
+10. **Not built in Phase 2A** (out of scope):
    - Accept-invitation page;
    - organization creation;
    - members and invitations management;
    - brands and products management;
    - methodology admin;
    - the evidence workspaces (segments, sources, observations, product, competitors, synthesis, review queue, reports, activity).
-10. **Visual QA pending:** tablet/mobile top bar, select trigger styling, dark theme.
+11. **Visual QA pending:** tablet/mobile top bar, select trigger styling, dark theme.
 
-## 7. Browser checks for the founder
-Run them in the WeWeb editor **Preview**, signed in with your own account. Use synthetic project titles only, and archive or record them for clean-up afterwards.
-1. **Signed-out redirect:** open `/dashboard` in a fresh preview → you should land on Login, without the expired notice.
-2. **Failed sign-in:** use a wrong password once → "Sign-in failed. Check your email and password." Then ask Claude to read `getWorkflowExecutionLogs` for workflow "Sign in", to confirm the catch-branch error path (§6.1). Do not exceed 5 failures: the rate limit blocks the email for 15 minutes.
-3. **Sign in** → Dashboard (with one membership) or Select Organization (with several). The sidebar shows the organization, your role, your name and your email.
-4. **Reload the browser** on `/projects` → you stay signed in (the session is persisted).
-5. **Navigation:** the active sidebar item highlights; on tablet and mobile widths the sidebar becomes a top bar.
-6. **New project:**
-   - without a product or a published methodology, the prerequisite notice appears;
-   - once they exist, creating a project opens its detail page with status `draft`.
-7. **Project detail:**
-   - "Mark as scoped" without segments → the `GATE_R0_SCOPE` message;
-   - an owner sees the Archive card, and archiving without a reason is refused.
-8. **Expired session:** in the browser devtools, delete the stored Xano session (or wait 8 h), then navigate → Login with "Session expired — sign in again".
-9. **Sign out** → Login. The back button must not show any data.
-10. **Role view:** if a viewer or editor test account is invited later, check that "New project" and the lifecycle buttons hide or disable correctly.
+## 7. Browser QA for the founder (A1–A10) — UNVERIFIED
+Run in the WeWeb editor **Preview** with your own account, and note the clock time of each step.
+- **Synthetic titles only.**
+- **No more than 4 wrong passwords** per 15 minutes: the 5th failure locks the email.
+- **For A2, type an obviously fake password** (e.g. `wrong-on-purpose-1`), never a variant of your real one. Execution logs may record the request a workflow sent.
+
+**Runnable now:**
+
+| # | Steps | Expected |
+|---|---|---|
+| A1 | Signed out (fresh preview), open `/dashboard` | Redirect to Login, without the "Session expired" notice |
+| A2 | Your email plus the fake password → Sign in. Note the time | "Sign-in failed. Check your email and password." Then Claude reads the **Sign in** workflow trace (`c156a152-…`) to verify the catch-branch error path (§6.1) |
+| A3 | Sign in with the correct password | Dashboard (one membership) or Select Organization (several). The sidebar shows organization, role, name and email |
+| A4 | On `/projects`, reload the browser | Still signed in; empty state "No projects match" |
+| A5 | Change the status filter; click both sidebar items; narrow the window to tablet/mobile | The list reloads without error; the active item highlights; the sidebar becomes a top bar |
+| A6 | Open `/new-project` | Notice naming the missing product and published methodology version |
+| A7 | Open `/project/999999` | "Project not available — Not found, or you do not have access." |
+| A8 | Click the organization card in the sidebar | Select Organization lists your memberships with role badges |
+| A9 | In devtools, Application tab: delete the stored Xano session entries for the preview origin, then navigate to another page | Login with "Session expired — sign in again" |
+| A10 | Sign in, click Sign out, then press Back | Login, with no project data visible |
+
+**Blocked until a product and a published methodology version exist:**
+- B1: create a project; it opens as `draft`.
+- B2: "Mark as scoped" without segments; refused with `GATE_R0_SCOPE`.
+- B3: archive without a reason (refused), then with a reason; restore as owner.
+- B4: dashboard counts and recent list with real rows.
+- B5: viewer/editor role views. This also needs a second invited account.
 
 ## 8. Next steps (Phase 2B candidates)
 - Accept-invitation page.
