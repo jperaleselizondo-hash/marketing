@@ -10,7 +10,8 @@ Build a research-first campaign-generation system guided by the owner’s Notion
 ## Current phase
 **PHASE 1 RESEARCH ENGINE BACKEND IMPLEMENTED (2026-10-29)** on Xano workspace 3, branch `v1`, under the direct-development policy in ADR-018 (see docs/11).
 - Backend changes in workspace 3 go through `xano/` and `scripts/xano-ws3.sh`, using the push workflow in docs/11 §11.
-- WeWeb pages, AI keys, AI pipelines and Modules 2/3 still require explicit authorization.
+- **Phase 2A WeWeb frontend BUILT (2026-10-29, unpublished):** WeWeb project `6b4943ea-eedb-4dc7-82bb-c3bbc9b690e2` only. See docs/13 and ADR-022. Publishing, further WeWeb phases, AI keys, AI pipelines and Modules 2/3 still require explicit authorization.
+- WeWeb MCP: pass `projectId` `6b4943ea-…` on every call; never open Goodz V2 or KMUI.
 - Test only with synthetic data and remove it afterwards.
 - Never fill the database with fake customer statements, and never make unsupported claims.
 

@@ -1,5 +1,5 @@
 # WeWeb frontend handoff — Research Engine (Phase 1A)
-Date: 2026-10-29. Status: **brief only. No WeWeb project has been created or modified.**
+Date: 2026-10-29. Status: **brief. Phase 2A was implemented from it in the WeWeb project "Marketing Engine"; see [docs/13](13-WEWEB-PHASE-2A-IMPLEMENTATION.md), which records deviations (e.g. ADR-022).**
 - Backend: Xano workspace 3, branch `v1` (live).
 - Full API inventory: [docs/11 §2](11-PHASE-1-IMPLEMENTATION.md).
 - Contracts below are taken from the deployed XanoScript in `xano/`.

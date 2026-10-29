@@ -2,7 +2,7 @@
 
 Research-first, evidence-grounded marketing campaign generation platform.
 
-**Status (2026-10-29):** the Phase 1 Research Engine backend is implemented on Xano workspace 3, branch `v1`: 29 tables, 24 functions, 80 endpoints, invite-only auth. It is tested end to end (71/71) and contains no data. The WeWeb frontend has not been started. See [docs/11](docs/11-PHASE-1-IMPLEMENTATION.md).
+**Status (2026-10-29):** the Phase 1 Research Engine backend is implemented on Xano workspace 3, branch `v1`: 29 tables, 24 functions, 80 endpoints, invite-only auth. It is tested end to end (71/71) and contains no data. See [docs/11](docs/11-PHASE-1-IMPLEMENTATION.md). The Phase 2A WeWeb frontend (login, session, app shell, organization context, dashboard, project list/creation/detail) is built in the WeWeb project "Marketing Engine" and is unpublished, pending browser validation. See [docs/13](docs/13-WEWEB-PHASE-2A-IMPLEMENTATION.md).
 
 **Repository layout:** `xano/` (canonical XanoScript of workspace 3 `v1`), `scripts/xano-ws3.sh` (guarded CLI wrapper, workspace 3 only), `tests/` (end-to-end suite, synthetic data only), `docs/`.
 
@@ -26,6 +26,8 @@ WeWeb frontend; Xano API/workflows/PostgreSQL; model-provider-agnostic AI gatewa
 - [Phase 1A Xano feasibility review (technical assessment)](docs/09-PHASE-1A-XANO-FEASIBILITY-REVIEW.md)
 - [Phase 1 architecture baseline (conceptual decisions)](docs/10-PHASE-1-ARCHITECTURE-BASELINE.md)
 - [**Phase 1 implementation: schema, API, security, tests (current)**](docs/11-PHASE-1-IMPLEMENTATION.md)
+- [WeWeb frontend handoff brief](docs/12-WEWEB-FRONTEND-HANDOFF.md)
+- [**Phase 2A WeWeb frontend implementation (current)**](docs/13-WEWEB-PHASE-2A-IMPLEMENTATION.md)
 - [Decisions and open questions](docs/DECISIONS.md)
 - [Claude implementation handoff](CLAUDE.md)
 
