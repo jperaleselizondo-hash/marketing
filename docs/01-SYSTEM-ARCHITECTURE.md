@@ -44,8 +44,10 @@ Xano background-task support and duration/concurrency limits must be validated *
 - Future-proof bilingual content: preserve source language, target locale and user-entered text; translation is a separate, reviewable output.
 
 ## Quality gates
-G0 setup & approved scope → G1 sources reviewed → G2 insights evidenced → G3 report frozen → G4 Big Idea approved → G5 advertising claim/copy review → G6 campaign packaged.
-A later change to G3 creates a new report version and marks dependent campaigns as needing reassessment, not silently updated.
+Stable gate codes (ADR-014; full table in [10-PHASE-1-ARCHITECTURE-BASELINE.md](10-PHASE-1-ARCHITECTURE-BASELINE.md) §4.3):
+`R0_SCOPE → R1_PRODUCT_FACTS → R2_COMPETITORS → R3_EVIDENCE → R4_INSIGHTS → R5_REPORT → S1_DESIRE_MATCH → S2_BIG_IDEA → P1_NARRATIVE → P2_ASSET_REVIEW → P3_PACKAGE`.
+(Former numbering: G0 scope, G1 sources, G2 insights, G3 report frozen, G4 Big Idea, G5 claim/copy review, G6 packaged.)
+A later change to `R5_REPORT` creates a new report version and marks dependent campaigns as needing reassessment, not silently updated.
 
 ## v1 exclusions
 Live ad-account posting, automated social engagement, scraping behind login/paywalls, autonomous mass outreach, multi-client SaaS billing, real-time analytics attribution.

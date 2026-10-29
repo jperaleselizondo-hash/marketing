@@ -1,6 +1,14 @@
 # Historical Ad Creation System — integration specification (draft)
 Date: 2026-10-27. Status: **documented for review; not authorization to implement**.
 
+> **2026-10-29 founder decisions (ADR-014, ADR-015; see [10-PHASE-1-ARCHITECTURE-BASELINE.md](10-PHASE-1-ARCHITECTURE-BASELINE.md) §4.3):**
+> - The Evaldo ten-question evaluation moves from M2 to **M3**, where it evaluates the persuasive narrative at `P1_NARRATIVE` before asset approval.
+> - S1 desire-match and S2 Big Idea / one-belief are separate approvals.
+> - M3 drafting requires an approved `S2_BIG_IDEA`.
+> - Gate numbering below is replaced by R/S/P codes.
+>
+> The reconstruction of the screenshot flow in §B is unchanged: it records the historical diagram, not the platform's module assignment.
+
 ## Source and interpretation
 Four owner-supplied screenshots of a flowchart titled **Ad creation system**. The screenshots overlap and show partial edges/labels; this transcription is a best-effort reconstruction, **not a claim to possess the complete original editable diagram**. Preserve screenshots as the reference in the conversation; do not upload screenshots into the public repo without explicit approval. If an editable flowchart is later supplied, reconcile it node by node.
 
@@ -35,8 +43,8 @@ The diagram starts with **Research and Audience Analysis** branching into:
 | Existing diagram step | Target module | Persisted artifact |
 |---|---|---|
 | Market/IVOC, competitors, product physical/functional, desires, awareness, sophistication | **M1 Deep Research** | Research Report: source-linked product capability/benefit/desire matrix, market analysis, segment-level awareness/sophistication |
-| Select one desire, match product performance, formulate core concept, one belief/message, Evaldo question review, approval | **M2 Campaign Strategy** | Campaign Blueprint, Big Idea candidates, **Core Message / One Belief**, desire-performance match, idea evaluation and approval |
-| Lead type/format, hook/headline, body, objections, offer, risk reduction, inducement, CUBA | **M3 Creative Production** | Master Persuasive Narrative, asset briefs, creative drafts/revisions, claim/risk/offer review, final Campaign Package |
+| Select one desire, match product performance (`S1_DESIRE_MATCH`), formulate core concept, one belief/message, approval (`S2_BIG_IDEA`) | **M2 Campaign Strategy** | Campaign Blueprint, Big Idea candidates, **Core Message / One Belief**, desire-performance match, idea approval |
+| Lead type/format, hook/headline, body, objections, offer, risk reduction, inducement, **Evaldo ten-question narrative evaluation** (`P1_NARRATIVE`), CUBA (`P2_ASSET_REVIEW`) | **M3 Creative Production** | Master Persuasive Narrative and its evaluation, asset briefs, creative drafts/revisions, claim/risk/offer review, final Campaign Package (`P3_PACKAGE`) |
 
 **Key distinction:** the historical diagram describes a **single-ad persuasive construction process**. The platform's campaign layer must support multiple assets/channels sharing one approved strategic idea. The same persuasion framework may generate a sales letter, landing page, LinkedIn ad, video script or email, with format-specific constraints.
 
@@ -46,7 +54,7 @@ The diagram starts with **Research and Audience Analysis** branching into:
 Contains segment-scoped dominant desire *candidates*, their supporting/contradictory IVOC, urgency/scope/staying-power scores, product performance/benefit links, competitor positioning, awareness and sophistication assessments, limitations and source manifest. **Research does not select the final creative idea**.
 
 ### Module 2 → Module 3: `approved_campaign_blueprint`
-Includes campaign objective, audience segment, selected dominant desire insight ID, verified product performance/benefit ID, central belief/one-message proposition, Big Idea, mechanism, awareness/sophistication, evidence references, approved channels, CTA/offer strategy, idea-evaluation answers (Evaldo questions only once verified), approver and immutable version. **Do not proceed to ad drafting without approval.**
+Includes campaign objective, audience segment, selected dominant desire insight ID, verified product performance/benefit ID, central belief/one-message proposition, Big Idea, mechanism, awareness/sophistication, evidence references, approved channels, CTA/offer strategy, approver and immutable version. **Do not proceed to ad drafting without `S2_BIG_IDEA` approval.** (Evaldo evaluation moved to M3; ADR-015.)
 
 ### Module 3: `persuasive_narrative` and `creative_asset`
 - Narrative: selected lead family/subtype, persuasion arc, ordered objections, benefit-driven subheads, proof and risk handling, approved offer/CTA, claims registry.
@@ -56,7 +64,7 @@ Includes campaign objective, audience segment, selected dominant desire insight 
 ## Data model implications (for future Module 2/3 schema review)
 1. Add `campaign_blueprints` (versioned, approved) linked to immutable `research_reports`.
 2. Add `campaign_message_beliefs` or typed fields on blueprint for **one belief / one message**; retain alternatives and rationale.
-3. Add `idea_evaluations` (questionnaire_id, question_version, question_id, answer, reviewer) once original Evaldo questionnaire is available.
+3. Add `narrative_evaluations` (M3; narrative version, questionnaire_id, question_version, question_id, answer, reviewer) once the original Evaldo questionnaire is available. It was previously `idea_evaluations` in M2 (moved by ADR-015).
 4. Add `persuasive_narratives` with structured objections/proof/benefit sequence, linked to blueprint version.
 5. Keep `creative_assets` and `creative_revisions` with channel/format/lead/headline/hook/body/CTA; do not store only monolithic copy.
 6. Add `offer_terms` and `risk_reduction_claims` with verification/validity windows; urgency/scarcity claims require real proof.
@@ -64,7 +72,8 @@ Includes campaign objective, audience segment, selected dominant desire insight 
 8. Avoid duplicate concept entities: reconcile existing `idea_candidates`, `campaign_structures`, `claim_registry`, `creative_assets` from docs/02-DATA-MODEL.md with the new blueprint/narrative model **before** physical schema implementation.
 
 ## Human gates
-G1 research evidence reviewed → G2 Research Report approved → G3 central desire/product-performance match and one-message/Big Idea approved → G4 narrative/offer/claim review → G5 asset-level CUBA + factual review → G6 Campaign Package approved.
+Superseded by stable codes (ADR-014): `R3_EVIDENCE`/`R4_INSIGHTS` research evidence reviewed → `R5_REPORT` Research Report approved → `S1_DESIRE_MATCH` central desire/product-performance match → `S2_BIG_IDEA` one-message/Big Idea approved → `P1_NARRATIVE` narrative/offer/claim review incl. Evaldo evaluation → `P2_ASSET_REVIEW` asset-level CUBA + factual review → `P3_PACKAGE` Campaign Package approved.
+(Former numbering: G1 evidence → G2 report → G3 desire match + Big Idea → G4 narrative → G5 asset → G6 package.)
 
 ## Open questions / no assumptions
 - Obtain original **Evaldo p.101 ten questions** (not legible/present here); do not synthesize a fake checklist.

@@ -1,5 +1,7 @@
 # Logical relational data model — v0.1 (draft)
 
+> **Baseline only.** The Module 1 portion is superseded by [07](07-RESEARCH-ENGINE-SCHEMA-V1.md) as amended by [10-PHASE-1-ARCHITECTURE-BASELINE.md](10-PHASE-1-ARCHITECTURE-BASELINE.md) (2026-10-29): `workspaces` → `organizations`, `workflow_runs` → `jobs`, approved taxonomy and the 28-table inventory. Campaign tables below remain an unreviewed M2/M3 sketch.
+
 This is **platform-neutral logical schema**, NOT a request to create Xano tables immediately. Use integer/bigint keys or UUID consistently after Xano feasibility review. Every business row has created_at/updated_at where sensible. Every user-owned entity is workspace-scoped (directly or via an enforced FK path). Prefer normalized keys over arrays of IDs.
 
 ## Foundation

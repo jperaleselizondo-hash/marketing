@@ -2,11 +2,12 @@
 
 Research-first, evidence-grounded marketing campaign generation platform.
 
-**Status:** Architecture draft v0.1 — no application code, Xano tables, APIs or WeWeb pages created.
+**Status:** Architecture baseline approved conceptually (2026-10-29). No application code, research tables or WeWeb pages created. Xano workspace 3 contains only Xano's starter auth scaffold. No Xano writes are authorized.
 
-## Two modules
-1. **Deep Research Engine:** independently researches a product, its customers, competitors and market; stores source-linked evidence; produces an approved, versioned Research Report.
-2. **Campaign Generator:** consumes an immutable approved Research Report version, develops and obtains approval for a Big Marketing Idea, then drafts advertising assets and a campaign package with claim-level provenance.
+## Three modules
+1. **Deep Research Engine (M1):** independently researches a product, its customers, competitors and market; stores source-linked evidence; produces an approved, versioned Research Report.
+2. **Campaign Strategy (M2):** consumes an immutable approved Research Report version, matches a dominant desire to product performance, and obtains approval for the one belief / Big Marketing Idea.
+3. **Creative Production (M3):** builds and evaluates the persuasive narrative, drafts advertising assets and the campaign package with claim-level provenance.
 
 ## Stack
 WeWeb frontend; Xano API/workflows/PostgreSQL; model-provider-agnostic AI gateway with structured outputs; external research acquisition adapters; Notion reference playbooks; GitHub as source of truth for technical documents and implementation.
@@ -17,6 +18,11 @@ WeWeb frontend; Xano API/workflows/PostgreSQL; model-provider-agnostic AI gatewa
 - [Workflows, contracts and guardrails](docs/03-WORKFLOWS.md)
 - [Research Report and campaign schemas](docs/04-OUTPUT-CONTRACTS.md)
 - [Methodology mapping](docs/05-METHODOLOGY-MAPPING.md)
+- [Historical research workbook mapping](docs/06-SPREADSHEET-RESEARCH-MAPPING.md)
+- [Module 1 logical schema V1](docs/07-RESEARCH-ENGINE-SCHEMA-V1.md)
+- [Historical ad creation system integration](docs/08-AD-CREATION-SYSTEM-INTEGRATION.md)
+- [Phase 1A Xano feasibility review (technical assessment)](docs/09-PHASE-1A-XANO-FEASIBILITY-REVIEW.md)
+- [**Phase 1 architecture baseline (current)**](docs/10-PHASE-1-ARCHITECTURE-BASELINE.md)
 - [Decisions and open questions](docs/DECISIONS.md)
 - [Claude implementation handoff](CLAUDE.md)
 

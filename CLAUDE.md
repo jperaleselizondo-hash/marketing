@@ -30,3 +30,10 @@ Read docs/06-SPREADSHEET-RESEARCH-MAPPING.md and docs/07-RESEARCH-ENGINE-SCHEMA-
 
 ## Historical ad-creation process (2026-10-27)
 Also read docs/08-AD-CREATION-SYSTEM-INTEGRATION.md. It maps the owner's flowchart to the three-module design. Do not confuse the research engine with selection of the final campaign idea; that belongs to Campaign Strategy. The Evaldo ten-question rubric is an unresolved source dependency. No database writes authorized.
+
+## Phase 1 architecture baseline (2026-10-29)
+- docs/10-PHASE-1-ARCHITECTURE-BASELINE.md is the current source of truth. It wins over 02, 07 and 08 on conflict. ADR-009–017 are in DECISIONS.md.
+- Xano **workspace 3 ("Marketing engine", created 2026-10-29 09:28:04+0000)** is the only authorized target.
+- The global CLI `default` profile points at Goodz (workspace 1, branch v55). Never run a `xano` command here without explicit `-w 3`.
+- Never touch the Goodz (1) or PMF (2) workspaces, the global default profile, or the `xano --version` profile.
+- M0 security and M1 tenancy batches are specified but **awaiting authorization**. S1–S9 spikes are not authorized until an isolated environment is confirmed.

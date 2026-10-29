@@ -2,6 +2,16 @@
 Status: **PROPOSED, NOT APPROVED FOR IMPLEMENTATION**. Updated 2026-10-27.
 Supersedes the *Module 1 portion* of docs/02-DATA-MODEL.md when accepted. This is a logical relational design, not Xano DDL.
 
+> **Amended 2026-10-29 by [10-PHASE-1-ARCHITECTURE-BASELINE.md](10-PHASE-1-ARCHITECTURE-BASELINE.md), which wins on conflict:**
+> - `workspaces`/`workspace_members`/`workspace_id` → `organizations`/`organization_members`/`organization_id`.
+> - `ai_jobs` → `jobs`.
+> - `users` → the existing Xano `user` table, extended.
+> - The insight and observation enums are replaced by the approved taxonomy (`ivoc_category`, `insight_kind`, `origin`, `evidence_basis`).
+> - `rights_status` is replaced by the five-dimension privacy model.
+> - Assessments add `ideal_client`, `trust`.
+> - Attribution and job-provenance fields are restored.
+> - `research_report_excerpts` is deferred; `import_batches` and `research_questions` are deferred; `invitations` is added.
+
 ## 0. Domain and workflow
 Workspace → Brand → Product → Research Project → Audience Segments.
 Research Project → Sources → Excerpts/Observations → Insights → Prioritization → Approved Research Report.

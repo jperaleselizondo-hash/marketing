@@ -2,6 +2,10 @@
 Date: 2026-10-29. Status: **TECHNICAL ASSESSMENT — NOT AN APPROVED PHYSICAL SCHEMA.** No Xano writes were made.
 
 > Founder review 2026-10-29: conditional GO for documentation consolidation and implementation planning; **NO-GO for database writes, API changes or deployment.** Table lists, endpoints, migration order and fields below are recommendations under review, not implementation authorization. The 28- vs 24-table scope is **not finalized**.
+>
+> **Update 2026-10-29:** the founder decisions on this review are consolidated in [10-PHASE-1-ARCHITECTURE-BASELINE.md](10-PHASE-1-ARCHITECTURE-BASELINE.md) and DECISIONS.md (ADR-009–017).
+> - Scope adopted: 27 core tables (incl. existing `user`) + `invitations` = 28; `research_report_excerpts` deferred.
+> - Naming in this review (`workspace_id`, `ai_jobs`, G-gates) is superseded there.
 Reviews: docs/07 (proposed Module 1 schema) against docs/02 (baseline), 03, 04, 06, 08.
 
 ---
