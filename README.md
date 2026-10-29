@@ -2,7 +2,9 @@
 
 Research-first, evidence-grounded marketing campaign generation platform.
 
-**Status:** Architecture baseline approved conceptually (2026-10-29). No application code, research tables or WeWeb pages created. Xano workspace 3 contains only Xano's starter auth scaffold. No Xano writes are authorized.
+**Status (2026-10-29):** the Phase 1 Research Engine backend is implemented on Xano workspace 3, branch `v1`: 29 tables, 24 functions, 80 endpoints, invite-only auth. It is tested end to end (71/71) and contains no data. The WeWeb frontend has not been started. See [docs/11](docs/11-PHASE-1-IMPLEMENTATION.md).
+
+**Repository layout:** `xano/` (canonical XanoScript of workspace 3 `v1`), `scripts/xano-ws3.sh` (guarded CLI wrapper, workspace 3 only), `tests/` (end-to-end suite, synthetic data only), `docs/`.
 
 ## Three modules
 1. **Deep Research Engine (M1):** independently researches a product, its customers, competitors and market; stores source-linked evidence; produces an approved, versioned Research Report.
@@ -22,7 +24,8 @@ WeWeb frontend; Xano API/workflows/PostgreSQL; model-provider-agnostic AI gatewa
 - [Module 1 logical schema V1](docs/07-RESEARCH-ENGINE-SCHEMA-V1.md)
 - [Historical ad creation system integration](docs/08-AD-CREATION-SYSTEM-INTEGRATION.md)
 - [Phase 1A Xano feasibility review (technical assessment)](docs/09-PHASE-1A-XANO-FEASIBILITY-REVIEW.md)
-- [**Phase 1 architecture baseline (current)**](docs/10-PHASE-1-ARCHITECTURE-BASELINE.md)
+- [Phase 1 architecture baseline (conceptual decisions)](docs/10-PHASE-1-ARCHITECTURE-BASELINE.md)
+- [**Phase 1 implementation: schema, API, security, tests (current)**](docs/11-PHASE-1-IMPLEMENTATION.md)
 - [Decisions and open questions](docs/DECISIONS.md)
 - [Claude implementation handoff](CLAUDE.md)
 

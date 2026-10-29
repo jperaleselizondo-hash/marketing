@@ -8,7 +8,11 @@ Build a research-first campaign-generation system guided by the owner’s Notion
 2. Campaign Generator → approved Big Marketing Idea and campaign/advertising assets.
 
 ## Current phase
-**DOCUMENTATION / ARCHITECTURE ONLY.** Do not create Xano tables, API endpoints, AI keys, WeWeb pages, pipelines or production data. Do not merge/deploy without explicit authorization. Do not make unsupported claims or fill the database with fake customer statements.
+**PHASE 1 RESEARCH ENGINE BACKEND IMPLEMENTED (2026-10-29)** on Xano workspace 3, branch `v1`, under the direct-development policy in ADR-018 (see docs/11).
+- Backend changes in workspace 3 go through `xano/` and `scripts/xano-ws3.sh`, using the push workflow in docs/11 §11.
+- WeWeb pages, AI keys, AI pipelines and Modules 2/3 still require explicit authorization.
+- Test only with synthetic data and remove it afterwards.
+- Never fill the database with fake customer statements, and never make unsupported claims.
 
 ## Immediate assignment once approved
 Review and challenge the logical data model, enumerate missing relational constraints and transaction checks, validate Xano implementation feasibility, propose minimum viable Phase 1 physical schema, API endpoints, and tested state machines. Deliver a gap analysis and migration order before implementing.
@@ -36,4 +40,10 @@ Also read docs/08-AD-CREATION-SYSTEM-INTEGRATION.md. It maps the owner's flowcha
 - Xano **workspace 3 ("Marketing engine", created 2026-10-29 09:28:04+0000)** is the only authorized target.
 - The global CLI `default` profile points at Goodz (workspace 1, branch v55). Never run a `xano` command here without explicit `-w 3`.
 - Never touch the Goodz (1) or PMF (2) workspaces, the global default profile, or the `xano --version` profile.
-- M0 security and M1 tenancy batches are specified but **awaiting authorization**. S1–S9 spikes are not authorized until an isolated environment is confirmed.
+- Implemented state, verified Xano behaviour and known limitations: docs/11-PHASE-1-IMPLEMENTATION.md, which supersedes docs/10's proposed physical details.
+- XanoScript traps verified live:
+  - no ternaries inside object literals;
+  - no backslashes in string literals;
+  - use `|get:"key"` for optional objects;
+  - `db.transaction` accepts no isolation level;
+  - Redis is unavailable on this plan.

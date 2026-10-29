@@ -1,6 +1,11 @@
 # Phase 1 architecture baseline — Research Engine and M0 security
 Date: 2026-10-29. Founder decision: **GO for architecture consolidation and M0 preparation. NO-GO for Xano writes, table creation, endpoint changes, credential configuration, tests or deployment.**
 
+> **Update 2026-10-29: implemented.** A later founder decision (ADR-018) authorized direct development on workspace 3 `v1`.
+> - The conceptual decisions here stand.
+> - The physical schema, API, M0 security, verification answers (§8) and deviations are recorded in [11-PHASE-1-IMPLEMENTATION.md](11-PHASE-1-IMPLEMENTATION.md), which wins over this document's [PROPOSED]/[UNVERIFIED] items.
+> - The sandbox/spike plan in §8–§9 was superseded and not executed.
+
 This document consolidates the founder decisions taken on [09-PHASE-1A-XANO-FEASIBILITY-REVIEW.md](09-PHASE-1A-XANO-FEASIBILITY-REVIEW.md). Where it conflicts with docs/02, 07 or 08, **this document wins**. Every section carries one status label:
 
 | Label | Meaning |

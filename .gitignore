@@ -1,0 +1,5 @@
+# Local test state and Xano CLI project pins (may reference credentials)
+e2e_state.json
+profile.yaml
+.xano/
+__pycache__/

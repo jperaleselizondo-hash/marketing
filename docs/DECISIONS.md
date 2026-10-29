@@ -75,3 +75,25 @@ Founder decision: **GO for architecture consolidation and M0 preparation; NO-GO 
 - M0 security batch: docs/10 §7, §9 Batch 1.
 - M1 tenancy schema: docs/10 §9 Batch 2.
 - S1–S9 verification spikes: not authorized. An isolated environment must first be confirmed (V1).
+
+*(Superseded on 2026-10-29 by ADR-018 below.)*
+
+## Phase 1 implementation (2026-10-29) — APPROVED / IMPLEMENTED
+Details in [11-PHASE-1-IMPLEMENTATION.md](11-PHASE-1-IMPLEMENTATION.md).
+- ADR-018: **Direct V1 development policy (founder decision).**
+  - Marketing Engine is developed directly on Xano workspace 3, branch `v1`.
+  - No sandboxes, extra branches, tenants or per-table/endpoint approvals.
+  - Synthetic test data must be removed after testing.
+  - This supersedes the sandbox/spike requirements of docs/10 §8–§9.
+  - Workspaces 1 (Goodz) and 2 (PMF) and the global CLI default profile remain off-limits.
+- ADR-019: **Table-based rate limiting.**
+  - Redis rate limiting is not supported on this Xano plan (verified).
+  - The deferred `login_attempts` table is promoted as an essential security dependency; total tables are now 29.
+- ADR-020: **Report-approval concurrency by row lock.**
+  - The XanoScript parser does not accept transaction isolation levels.
+  - Approval updates the project row first, taking its lock, then re-checks `content_revision`. Evidence writes bump the same row, so approval and edits serialize.
+  - Verified with parallel requests.
+- ADR-021: **Secrets and pseudonymization.**
+  - `MKTENG_BOOTSTRAP_SECRET` (one-time owner bootstrap) and `MKTENG_PSEUDONYM_KEY` (keyed HMAC of author/speaker handles) live only in workspace 3's environment and private local files, never in git.
+  - Raw handles are not stored.
+- Status: Phase 1 Research Engine backend implemented and tested (71/71 end-to-end checks). Synthetic data removed. Goodz and PMF verified unchanged.
